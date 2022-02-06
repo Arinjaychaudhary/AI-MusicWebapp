@@ -1,15 +1,18 @@
 dynamite="";
 dance="";
-leftWristX="";
-leftWristY="";
-rightWristX="";
-rightWristY="";
+dynamite_status="";
+dance_status="";
+leftWristX=0;
+leftWristY=0;
+rightWristX=0;
+rightWristY=0;
 
-leftWristscore="";
+leftWristscore=0;
+rightWristscore=0;
 
 function preload(){
-    dynamite = loadSound("BTS-Dynamite-(TrendyBeatz.com).mp3");
-    dance=loadSound("levitating.mp3");
+    dynamite = loadSound("music.mp3");
+    dance=loadSound("music2.mp3");
 }
 
 function setup(){
@@ -26,23 +29,35 @@ function setup(){
 
 function draw(){
     image(video,0,0,800,450);
+    dynamite_status=dynamite.isPlaying();
+    dance_status=dance.isPlaying();
     fill("#0000FF");
     stroke("#0000FF");
 
-    if(dynamite.isPlaying())
-    {
-        dynamite.stop();
-    }
+ 
 
     if(leftWristscore > 0.001)
     {
-    dance.stop();
-    circle(leftWristX,leftWristY,20);
-    LeftWristint=Number(leftWristY);
-    leftWristDec=floor(LeftWristint);
     
-    dynamite.play();
-     document.getElementById("name").innerHTML="Song = Dynamite";
+    circle(leftWristX,leftWristY,20);
+    dance.stop();
+    if(dynamite_status == false)
+    {
+        dynamite.play();
+        document.getElementById("name").innerHTML="Song = Dynamite";
+    }
+    }
+
+    if(rightWristscore > 0.001)
+    {
+    
+    circle(rightWristX,rightWristY,20);
+    dynamite.stop();
+    if(dance_status == false)
+    {
+        dance.play();
+        document.getElementById("name").innerHTML="Song = Peter Pan";
+    }
     }
 }
 
@@ -57,6 +72,7 @@ function gotPoses(results){
 
         console.log(results);
         leftWristscore=results[0].pose.keypoints[9].score;
+        rightWristscore=results[0].pose.keypoints[10].score;
         leftWristX=results[0].pose.leftWrist.x;
         leftWristY=results[0].pose.leftWrist.y;
         console.log("Left Wrst X = " +leftWristX+ "Left Wrist Y = " +leftWristY);
@@ -67,4 +83,8 @@ function gotPoses(results){
         console.log(leftWristscore);
     }
 }
-
+function play(){
+    song.play();
+    song.setVolume(1);
+    song.rate(1);
+}
